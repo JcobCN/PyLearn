@@ -48,6 +48,9 @@ class Example(QMainWindow):
         fileMenu = menuBar.addMenu('File')
         fileMenu.addAction(exitAct)
 
+        self.toolbar = self.addToolBar('Exit')
+        self.toolbar.addAction(exitAct)
+
         # subMenu add to FileMenu
         subMenu = QMenu('Import', self)
         subAct = QAction('Import file', self)
@@ -66,7 +69,7 @@ class Example(QMainWindow):
         self.center()
         self.setFixedSize(700, 400)
         self.setWindowTitle('将图片转换成jpg 1080')
-        self.statusbar = self.statusBar();
+        self.statusbar = self.statusBar()
         self.statusbar.showMessage('Ready')
         self.setWindowIcon(QIcon('46.jpg'))
         self.show()
@@ -78,6 +81,7 @@ class Example(QMainWindow):
         self.move(qr.topLeft())
 
     #When Widgets is closing, call this function by automaticlly
+    #virtualFunction
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message', 'Are you sure to quit',
                                      QMessageBox.Yes|QMessageBox.No, QMessageBox.No)
@@ -85,6 +89,21 @@ class Example(QMainWindow):
             event.accept()
         else:
             event.ignore()
+
+    #virtual Function
+    def contextMenuEvent(self, event):
+        cmenu = QMenu(self)
+
+        newAct = cmenu.addAction('New')
+        opnAct = cmenu.addAction('Open')
+        quitAct = cmenu.addAction('Quit')
+
+        #which Action
+        print(type(event), event.pos())
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == quitAct:
+            QApplication.instance().quit()
 
     def toggleMenu(self, state):
         print(state)
